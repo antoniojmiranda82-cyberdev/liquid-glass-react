@@ -83,8 +83,9 @@ export interface PremiumGlassProps
   /** Skip capability detection when refraction is on. For demos and tests only. */
   forceRefraction?: boolean
   /**
-   * 0-1 dark layer under the content (frost and solid paths). Glass is translucent, so text contrast
-   * depends on what is behind it; raise this over bright imagery. Default 0.
+   * 0-1 dark layer under the content, on the frost and refraction paths. Glass is translucent, so text
+   * contrast depends on what is behind it; raise this over bright imagery. Default 0. The opaque solid
+   * surface (reduced transparency, more contrast, forced colours) ignores it: it is already opaque.
    */
   scrim?: number
 }
@@ -188,7 +189,26 @@ export function PremiumGlass({
             style={{ position: "absolute", top: "50%", left: "50%" }}
           >
             {/* The core sizes itself to its content, so the content carries the host dimensions. */}
-            <div style={{ width, height, display: "flex", alignItems: "center", justifyContent: "center", padding, boxSizing: "border-box" }}>
+            <div
+              style={{
+                width,
+                height,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding,
+                boxSizing: "border-box",
+                // Only when a scrim is requested: an isolated stacking context so the scrim can sit at z-index -1,
+                // under the children and over the refracted backdrop, without changing how the children lay out.
+                ...(scrim > 0 && { position: "relative", isolation: "isolate" }),
+              }}
+            >
+              {scrim > 0 && (
+                <div
+                  aria-hidden="true"
+                  style={{ position: "absolute", inset: 0, zIndex: -1, borderRadius: radius, background: `rgba(5,6,10,${scrim})`, pointerEvents: "none" }}
+                />
+              )}
               {children}
             </div>
           </RefractionGlass>
