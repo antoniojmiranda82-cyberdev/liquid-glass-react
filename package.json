@@ -4,13 +4,14 @@
   "description": "Apple's Liquid Glass effect for React",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "files": ["dist"],
-  "workspaces": ["liquid-glass"],
+  "types": "dist/entry.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
-    "build:esm": "esbuild src/index.tsx --bundle --format=esm --outfile=dist/index.esm.js --external:react --external:react-dom",
-    "build:cjs": "esbuild src/index.tsx --bundle --format=cjs --outfile=dist/index.js --external:react --external:react-dom",
+    "build:esm": "esbuild src/entry.ts --bundle --format=esm --outfile=dist/index.esm.js --external:react --external:react-dom --banner:js='\"use client\";'",
+    "build:cjs": "esbuild src/entry.ts --bundle --format=cjs --outfile=dist/index.js --external:react --external:react-dom --banner:js='\"use client\";'",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "clean": "rm -rf dist",
     "dev": "npm run build:esm -- --watch",
@@ -29,11 +30,16 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.0.0"
   },
-  "keywords": ["react", "component", "library", "typescript"],
+  "keywords": [
+    "react",
+    "component",
+    "library",
+    "typescript"
+  ],
   "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/antoniojmiranda82-cyberdev/liquid-glass-react.git"
   }
 }
