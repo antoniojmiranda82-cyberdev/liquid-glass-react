@@ -1,0 +1,6 @@
+{
+  "name": "glass-verify",
+  "private": true,
+  "scripts": { "test": "node verify.cjs" },
+  "dependencies": { "axe-core": "^4.10.0" }
+}
