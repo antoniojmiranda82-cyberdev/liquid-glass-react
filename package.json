@@ -3,19 +3,17 @@
   "version": "1.1.1",
   "description": "Apple's Liquid Glass effect for React",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/entry.d.ts",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
-    "build:esm": "esbuild src/entry.ts --bundle --format=esm --outfile=dist/index.esm.js --external:react --external:react-dom --banner:js='\"use client\";'",
-    "build:cjs": "esbuild src/entry.ts --bundle --format=cjs --outfile=dist/index.js --external:react --external:react-dom --banner:js='\"use client\";'",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build": "tsdown",
     "clean": "rm -rf dist",
-    "dev": "npm run build:esm -- --watch",
-    "prepublishOnly": "npm run build"
+    "dev": "tsdown --watch",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -28,6 +26,7 @@
     "esbuild": "^0.19.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tsdown": "^0.23.1",
     "typescript": "^5.0.0"
   },
   "keywords": [
@@ -41,5 +40,36 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antoniojmiranda82-cyberdev/liquid-glass-react.git"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json",
+    "./premium": {
+      "import": {
+        "types": "./dist/premium.d.mts",
+        "default": "./dist/premium.mjs"
+      },
+      "require": {
+        "types": "./dist/premium.d.ts",
+        "default": "./dist/premium.js"
+      }
+    }
+  },
+  "sideEffects": false,
+  "typesVersions": {
+    "*": {
+      "premium": [
+        "dist/premium.d.ts"
+      ]
+    }
   }
 }
