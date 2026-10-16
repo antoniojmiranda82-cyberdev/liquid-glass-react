@@ -178,3 +178,12 @@ dist/
 .DS_Store
 
 liquid-glass-example/src/components
+
+# Test apps (generated)
+test-apps/*/package-lock.json
+test-apps/*/next-env.d.ts
+test-apps/verify/results*.json
+test-apps/*/AGENTS.md
+test-apps/*/CLAUDE.md
+test-apps/vite-app/src/demo.tsx
+test-apps/next-app/demo.tsx

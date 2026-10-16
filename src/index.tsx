@@ -177,7 +177,12 @@ const GlassContainer = forwardRef<
     const filterId = useId()
     const [shaderMapUrl, setShaderMapUrl] = useState<string>("")
 
-    const isFirefox = navigator.userAgent.toLowerCase().includes("firefox")
+    // Browser sniffing must never run during render: `navigator` does not exist on the
+    // server (Next.js / Remix SSR), and reading it during hydration would cause a mismatch.
+    const [isFirefox, setIsFirefox] = useState(false)
+    useEffect(() => {
+      setIsFirefox(navigator.userAgent.toLowerCase().includes("firefox"))
+    }, [])
 
     // Generate shader displacement map when in shader mode
     useEffect(() => {
@@ -193,7 +198,12 @@ const GlassContainer = forwardRef<
     }
 
     return (
-      <div ref={ref} className={`relative ${className} ${active ? "active" : ""} ${Boolean(onClick) ? "cursor-pointer" : ""}`} style={style} onClick={onClick}>
+      <div
+        ref={ref}
+        className={`${className} ${active ? "active" : ""}`.trim()}
+        style={{ position: "relative", ...(onClick ? { cursor: "pointer" } : null), ...style }}
+        onClick={onClick}
+      >
         <GlassFilter mode={mode} id={filterId} displacementScale={displacementScale} aberrationIntensity={aberrationIntensity} width={glassSize.width} height={glassSize.height} shaderMapUrl={shaderMapUrl} />
 
         <div
@@ -228,8 +238,9 @@ const GlassContainer = forwardRef<
 
           {/* user content stays sharp */}
           <div
-            className="transition-all duration-150 ease-in-out text-white"
             style={{
+              color: "#fff",
+              transition: "all 150ms ease-in-out",
               position: "relative",
               zIndex: 1,
               font: "500 20px/1 system-ui",
@@ -246,7 +257,7 @@ const GlassContainer = forwardRef<
 
 GlassContainer.displayName = "GlassContainer"
 
-interface LiquidGlassProps {
+export interface LiquidGlassProps {
   children: React.ReactNode
   displacementScale?: number
   blurAmount?: number
@@ -459,8 +470,10 @@ export default function LiquidGlass({
     <>
       {/* Over light effect */}
       <div
-        className={`bg-black transition-all duration-150 ease-in-out pointer-events-none ${overLight ? "opacity-20" : "opacity-0"}`}
         style={{
+          background: "#000",
+          pointerEvents: "none",
+          opacity: overLight ? 0.2 : 0,
           ...positionStyles,
           height: glassSize.height,
           width: glassSize.width,
@@ -470,8 +483,11 @@ export default function LiquidGlass({
         }}
       />
       <div
-        className={`bg-black transition-all duration-150 ease-in-out pointer-events-none mix-blend-overlay ${overLight ? "opacity-100" : "opacity-0"}`}
         style={{
+          background: "#000",
+          pointerEvents: "none",
+          mixBlendMode: "overlay",
+          opacity: overLight ? 1 : 0,
           ...positionStyles,
           height: glassSize.height,
           width: glassSize.width,
