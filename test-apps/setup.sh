@@ -12,7 +12,7 @@ mv test-apps/liquid-glass-react-*.tgz test-apps/liquid-glass-react.tgz
 sed 's#"liquid-glass-react"#"liquid-glass-react/premium"#' test-apps/shared/demo.tsx > test-apps/next-app/demo.tsx
 cp test-apps/shared/demo.tsx test-apps/vite-app/src/demo.tsx
 
-for app in next-app vite-app; do
+for app in next-app vite-app smooth-app; do
   (cd "test-apps/$app" && rm -rf node_modules package-lock.json .next dist && npm install --no-audit --no-fund --silent && npm run build --silent)
 done
 echo "setup ok"

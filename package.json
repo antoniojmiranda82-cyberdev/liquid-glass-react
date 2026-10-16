@@ -14,7 +14,8 @@
     "dev": "tsdown --watch",
     "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
-    "test": "bash test-apps/setup.sh && bash test-apps/run.sh && bash test-apps/package-check.sh"
+    "test": "bash test-apps/setup.sh && bash test-apps/run.sh && bash test-apps/package-check.sh",
+    "test:compat": "bash test-apps/run-compat.sh"
   },
   "peerDependencies": {
     "react": ">=18",
